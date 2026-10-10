@@ -1,0 +1,5 @@
+ESTONA — Sitio web actualizado
+
+Abre index.html en un navegador. Mantén la carpeta assets junto al archivo.
+Incluye 6 colecciones, galerías con imagen fija, 20 muestras reales de color, logo transparente y diseño móvil adaptado.
+Los datos técnicos son provisionales.

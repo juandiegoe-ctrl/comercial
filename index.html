@@ -55,7 +55,7 @@ const progress=Math.max(0,Math.min(1,(start-r.top)/(start-end)));
 el.style.opacity=String(1-progress);
 };const onScroll=()=>{if(!pending){pending=true;requestAnimationFrame(update)}};
 window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll,{passive:true});update();})();
-const productColors=document.querySelector('.product-colors-scroll');document.querySelectorAll('#palette-scroll .swatch').forEach(s=>productColors.append(s.cloneNode(true)));document.querySelector('.product-colors-prev').onclick=()=>productColors.scrollBy({left:-240,behavior:'smooth'});document.querySelector('.product-colors-next').onclick=()=>productColors.scrollBy({left:240,behavior:'smooth'});
+const productColors=document.querySelector('.product-colors-scroll');document.querySelectorAll('#palette-scroll .swatch').forEach(s=>{const swatch=s.cloneNode(true);swatch.querySelector('.swatch-meta span:last-child')?.remove();productColors.append(swatch)});document.querySelector('.product-colors-prev').onclick=()=>productColors.scrollBy({left:-240,behavior:'smooth'});document.querySelector('.product-colors-next').onclick=()=>productColors.scrollBy({left:240,behavior:'smooth'});
 // La textura se desplaza más lentamente que el contenido.
 (()=>{const reduce=matchMedia('(prefers-reduced-motion: reduce)');let queued=false;function update(){queued=false;document.body.style.setProperty('--texture-y',reduce.matches?'0px':(-window.scrollY*.18)+'px')}window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(update)}},{passive:true});reduce.addEventListener('change',update);update()})();
 </script></body></html>

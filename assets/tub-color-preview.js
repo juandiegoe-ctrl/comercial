@@ -40,6 +40,41 @@
     return sourcePromise;
   }
 
+  function freeze(canvas) {
+    const opacity = getComputedStyle(canvas).opacity;
+    canvas.getAnimations().forEach(animation => animation.cancel());
+    canvas.style.opacity = opacity;
+  }
+
+  function transitionPreview(slide, next) {
+    const previous = Array.from(slide.querySelectorAll('canvas'));
+    previous.forEach(freeze);
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (next) {
+      next.style.opacity = reduced ? '1' : '0';
+      slide.append(next);
+      if (reduced) {
+        previous.forEach(canvas => canvas.remove());
+        return;
+      }
+      const animation = next.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 450, easing: 'ease-in-out', fill: 'forwards',
+      });
+      animation.finished.then(() => {
+        next.style.opacity = '1';
+        animation.cancel();
+        previous.forEach(canvas => canvas.remove());
+      }).catch(() => {});
+    } else {
+      previous.forEach(canvas => {
+        if (reduced) { canvas.remove(); return; }
+        canvas.animate([{ opacity: getComputedStyle(canvas).opacity }, { opacity: 0 }], {
+          duration: 450, easing: 'ease-in-out', fill: 'forwards',
+        }).finished.then(() => canvas.remove()).catch(() => {});
+      });
+    }
+  }
+
   async function sync() {
     const request = ++version;
     if (active !== 'tinas') return;
@@ -51,7 +86,7 @@
     const slide = track.firstElementChild;
     if (!slide) return;
     if (selected === 12) {
-      slide.querySelector('canvas')?.remove();
+      transitionPreview(slide, null);
       delete slide.dataset.previewColor;
       note.textContent = 'Color 13 · Rosado original · Foto 01';
       document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color 13, rosado original.');
@@ -76,17 +111,14 @@
           output.data[i + c] = original.data[i + c] * (1 - weight) + value * weight;
         }
       }
-      let canvas = slide.querySelector('canvas');
-      if (!canvas) {
-        canvas = document.createElement('canvas');
-        canvas.className = 'tub-color-canvas';
-        canvas.setAttribute('role', 'img');
-        slide.append(canvas);
-      }
+      const canvas = document.createElement('canvas');
+      canvas.className = 'tub-color-canvas';
+      canvas.setAttribute('role', 'img');
       canvas.width = width;
       canvas.height = height;
       canvas.getContext('2d').putImageData(output, 0, 0);
       canvas.setAttribute('aria-label', 'Tina en color ' + number + '. Simulación aproximada.');
+      transitionPreview(slide, canvas);
       slide.dataset.previewColor = String(selected);
       note.textContent = 'Color ' + number + ' · Vista aproximada · Foto 01';
     } catch {

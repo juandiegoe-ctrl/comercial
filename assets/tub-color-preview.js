@@ -2,7 +2,8 @@
 (() => {
   const palette = document.querySelector('.product-colors-scroll');
   const note = document.querySelector('.tub-preview-note');
-  let selected = 12;
+  let selected = null;
+  let currentSlide = null;
   const sourcePromises = new Map();
   const photos = [
     { name: 'tinas_01', light: 155, clip: 'M134 1002 C130 935 327 875 570 839 C880 785 1137 776 1338 803 C1525 823 1693 854 1660 924 L1513 1384 Q1466 1504 900 1601 Q534 1698 307 1641 Q255 1625 237 1557 Z' },
@@ -91,15 +92,32 @@
 
   async function sync() {
     const request = ++version;
-    if (active !== 'tinas') return;
-    const buttons = palette.querySelectorAll('[data-tub-color]');
-    buttons.forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.tubColor) === selected)));
-    if (selected === null) return;
-    const number = String(selected + 1).padStart(2, '0');
-    document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color ' + number + '.');
+    if (active !== 'tinas') {
+      currentSlide = null;
+      selected = null;
+      return;
+    }
     const photoIndex = index;
     const slide = track.children[photoIndex];
     if (!slide) return;
+    if (slide !== currentSlide) {
+      selected = null;
+      currentSlide = slide;
+      track.querySelectorAll('canvas').forEach(canvas => {
+        canvas.getAnimations().forEach(animation => animation.cancel());
+        canvas.remove();
+      });
+      Array.from(track.children).forEach(item => delete item.dataset.previewColor);
+    }
+    const buttons = palette.querySelectorAll('[data-tub-color]');
+    buttons.forEach(button => button.setAttribute('aria-pressed', String(Number(button.dataset.tubColor) === selected)));
+    if (selected === null) {
+      note.textContent = 'Foto original · Selecciona un color';
+      document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto.');
+      return;
+    }
+    const number = String(selected + 1).padStart(2, '0');
+    document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color ' + number + '.');
     if (selected === 12 && photoIndex === 0) {
       transitionPreview(slide, null);
       delete slide.dataset.previewColor;

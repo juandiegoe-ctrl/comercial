@@ -7,10 +7,10 @@
   const sourcePromises = new Map();
   const photos = [
     { name: 'tinas_01', light: 155, clip: 'M134 1002 C130 935 327 875 570 839 C880 785 1137 776 1338 803 C1525 823 1693 854 1660 924 L1513 1384 Q1466 1504 900 1601 Q534 1698 307 1641 Q255 1625 237 1557 Z' },
-    { name: 'tinas_ambiente', light: 180, clip: 'M135 948 C230 820 580 716 1124 716 L1600 712 L1600 1592 L260 1592 Z' },
-    { name: 'tinas_rosa', light: 165 },
-    { name: 'tinas_detalle_borde', light: 155 },
-    { name: 'tinas_verde', light: 145 },
+    { name: 'tinas_ambiente', light: 180, expand: 2, clip: 'M135 928 C230 800 580 696 1124 696 L1600 692 L1600 1592 L260 1592 Z' },
+    { name: 'tinas_rosa', light: 165, expand: 1 },
+    { name: 'tinas_detalle_borde', light: 155, mask: 'tinas_detalle_borde_mask_v2' },
+    { name: 'tinas_verde', light: 145, expand: 1 },
   ];
   let version = 0;
 
@@ -20,12 +20,70 @@
     return image.decode().then(() => image);
   }
 
+  // Refine only boundary pixels, using the actual photograph to preserve object edges.
+  // This runs once per photo; recoloring reuses the cached refined mask.
+  function refineMask(photo, mask, expand = 0) {
+    const { width, height } = mask;
+    const stride = width + 1;
+    const integral = new Float64Array(stride * (height + 1));
+    const raw = new Float32Array(width * height);
+    for (let y = 0; y < height; y++) {
+      let rowSum = 0;
+      for (let x = 0; x < width; x++) {
+        const pixel = y * width + x;
+        raw[pixel] = mask.data[pixel * 4] / 255 * mask.data[pixel * 4 + 3] / 255;
+        if (expand && raw[pixel] < 1) {
+          for (let ny = Math.max(0, y - expand); ny <= Math.min(height - 1, y + expand); ny++) {
+            for (let nx = Math.max(0, x - expand); nx <= Math.min(width - 1, x + expand); nx++) {
+              const neighbor = (ny * width + nx) * 4;
+              raw[pixel] = Math.max(raw[pixel], mask.data[neighbor] / 255 * mask.data[neighbor + 3] / 255);
+            }
+          }
+        }
+        rowSum += raw[pixel];
+        integral[(y + 1) * stride + x + 1] = integral[y * stride + x + 1] + rowSum;
+      }
+    }
+    const radius = 3;
+    for (let y = 0; y < height; y++) {
+      const top = Math.max(0, y - radius), bottom = Math.min(height, y + radius + 1);
+      for (let x = 0; x < width; x++) {
+        const left = Math.max(0, x - radius), right = Math.min(width, x + radius + 1);
+        const area = (right - left) * (bottom - top);
+        const total = integral[bottom * stride + right] - integral[top * stride + right]
+          - integral[bottom * stride + left] + integral[top * stride + left];
+        const k = (y * width + x) * 4;
+        let alpha = total < .001 ? 0 : total > area - .001 ? 1 : null;
+        if (alpha === null) {
+          let sum = 0, weights = 0;
+          for (let ny = top; ny < bottom; ny++) {
+            for (let nx = left; nx < right; nx++) {
+              const n = (ny * width + nx) * 4;
+              const dr = photo.data[k] - photo.data[n];
+              const dg = photo.data[k + 1] - photo.data[n + 1];
+              const db = photo.data[k + 2] - photo.data[n + 2];
+              const distance = (nx - x) ** 2 + (ny - y) ** 2;
+              const weight = Math.exp(-distance / 8 - (dr * dr + dg * dg + db * db) / 800);
+              sum += raw[ny * width + nx] * weight;
+              weights += weight;
+            }
+          }
+          alpha = sum / weights;
+          if (alpha < .02) alpha = 0;
+          else if (alpha > .98) alpha = 1;
+        }
+        mask.data[k] = Math.round(alpha * 255);
+        mask.data[k + 3] = 255;
+      }
+    }
+  }
+
   function sources(photoIndex) {
     const config = photos[photoIndex];
     if (!sourcePromises.has(photoIndex)) {
       const pending = Promise.all([
         loadImage('assets/' + config.name + '.webp'),
-        loadImage('assets/' + config.name + '_mask.webp'),
+        loadImage('assets/' + (config.mask || config.name + '_mask') + '.webp'),
       ]).then(([photo, mask]) => {
         const canvas = document.createElement('canvas');
         const scale = Math.min(1, 1280 / Math.max(photo.naturalWidth, photo.naturalHeight));
@@ -45,6 +103,7 @@
         }
         ctx.restore();
         const segmentation = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        refineMask(original, segmentation, config.expand);
         return { original, segmentation, width: canvas.width, height: canvas.height, light: config.light };
       }).catch(error => {
         sourcePromises.delete(photoIndex);

@@ -2,7 +2,7 @@
 (() => {
   const palette = document.querySelector('.product-colors-scroll');
   const note = document.querySelector('.tub-preview-note');
-  let selected = null;
+  let selected = 12;
   let sourcePromise;
   let version = 0;
 
@@ -49,7 +49,15 @@
     const number = String(selected + 1).padStart(2, '0');
     document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color ' + number + '.');
     const slide = track.firstElementChild;
-    if (!slide || slide.dataset.previewColor === String(selected)) return;
+    if (!slide) return;
+    if (selected === 12) {
+      slide.querySelector('canvas')?.remove();
+      delete slide.dataset.previewColor;
+      note.textContent = 'Color 13 · Rosado original · Foto 01';
+      document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color 13, rosado original.');
+      return;
+    }
+    if (slide.dataset.previewColor === String(selected)) return;
     note.textContent = 'Preparando color ' + number + '…';
     try {
       const { original, segmentation, width, height } = await sources();

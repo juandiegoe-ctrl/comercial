@@ -176,12 +176,12 @@
       return;
     }
     const number = String(selected + 1).padStart(2, '0');
-    document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color ' + number + '.');
-    if (selected === 12 && photoIndex === 0) {
+    document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color ' + number + ', ' + tubColorNames[selected] + '.');
+    if ((selected === 7 && photoIndex <= 2) || (selected === 4 && photoIndex === 4) || (selected === 5 && photoIndex === 3)) {
       transitionPreview(slide, null);
       delete slide.dataset.previewColor;
-      note.textContent = 'Color 13 · Rosado original';
-      document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color 13, rosado original.');
+      note.textContent = 'Color ' + number + ' · ' + tubColorNames[selected] + ' · Foto original';
+      document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent('Hola, quiero cotizar: Tinas de concreto. Color ' + number + ', ' + tubColorNames[selected] + '.');
       return;
     }
     if (slide.dataset.previewColor === String(selected)) {

@@ -200,7 +200,11 @@
         if (!weight) continue;
         const light = original.data[i] * .2126 + original.data[i + 1] * .7152 + original.data[i + 2] * .0722;
         // Retain measured texture and shadows, while replacing the pink base color.
-        const shade = Math.max(.18, Math.min(1.3, light / baseLight));
+        const illumination = light / baseLight;
+        // Matte clay retains a muted body tone instead of oversaturating its lit rim.
+        const shade = selected === 6
+          ? Math.max(.35, Math.min(1.12, .4 + .6 * illumination))
+          : Math.max(.18, Math.min(1.3, illumination));
         for (let c = 0; c < 3; c++) {
           const value = Math.min(255, target[c] * shade);
           output.data[i + c] = original.data[i + c] * (1 - weight) + value * weight;

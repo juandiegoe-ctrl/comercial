@@ -1,6 +1,11 @@
 /* Photo 01: each finish has separately specified matrix and aggregate colors. */
 (() => {
   const definitions = [
+    [1, 'Rojo', null],
+    [2, 'Menta', null],
+    [3, 'Hueso', null],
+    [4, 'Gris', null],
+    [5, 'Gris oscuro', null],
     [6, 'Blanco', 'blancos, negros y grises'],
     [7, 'Original', 'los de la foto original'],
     [8, 'Hueso original', 'todos blancos'],
@@ -33,9 +38,15 @@
   let currentImage = null;
   const loaded = new Map();
 
+  function description(finish) {
+    return `Fondo ${finish.background} · ` + (finish.grains === null
+      ? 'Sin granos · Textura fina de arena'
+      : `Granos ${finish.grains}`);
+  }
+
   function quote(finish) {
     document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent(
-      `Hola, quiero cotizar: Lavamanos de pedestal. Acabado ${finish.number}. Fondo: ${finish.background}. Granos: ${finish.grains}.`
+      `Hola, quiero cotizar: Lavamanos de pedestal. Acabado ${finish.number}. ${description(finish)}.`
     );
   }
 
@@ -47,7 +58,7 @@
       button.type = 'button';
       button.className = 'swatch pedestal-finish-button';
       button.dataset.pedestalFinish = finish.id;
-      button.title = `Acabado ${finish.number} · Fondo ${finish.background} · Granos ${finish.grains}`;
+      button.title = `Acabado ${finish.number} · ${description(finish)}`;
       button.setAttribute('aria-label', button.title);
       const sample = document.createElement('img');
       sample.src = finish.sample;
@@ -98,7 +109,7 @@
     const finish = definitions.find(item => item.id === selected);
     quote(finish);
     if (image?.dataset.finish === String(selected) || selected === 7) {
-      note.textContent = selected === 7 ? 'Acabado 07 · Foto original' : `Acabado ${finish.number} · Fondo ${finish.background} · Granos ${finish.grains}`;
+      note.textContent = selected === 7 ? 'Acabado 07 · Foto original' : `Acabado ${finish.number} · ${description(finish)}`;
     }
   }
 
@@ -120,7 +131,7 @@
       image.src = finish.image;
       image.dataset.finish = id;
       image.classList.add('pedestal-photo-preview');
-      image.alt = `Lavamanos de pedestal · Acabado ${finish.number} · Fondo ${finish.background} · Granos ${finish.grains}`;
+      image.alt = `Lavamanos de pedestal · Acabado ${finish.number} · ${description(finish)}`;
       index = 0;
       render();
     } catch {

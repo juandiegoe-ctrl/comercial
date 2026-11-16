@@ -8,20 +8,20 @@
     [5, 'Gris oscuro', null],
     [6, 'Blanco', 'blancos, negros y grises'],
     [7, 'Hueso', 'rojos, negros y grises'],
-    [8, 'Hueso original', 'todos blancos'],
+    [8, 'Hueso', 'todos blancos'],
     [9, 'Blanco', 'blancos, verdes y azules'],
     [10, 'Blanco', 'grises y rosados'],
     [11, 'Negro', 'todos negros'],
     [12, 'Negro', 'todos blancos'],
     [13, 'Gris', 'blancos y negros'],
     [14, 'Gris', 'blancos, amarillos y negros'],
-    [15, 'Hueso original', 'rojos y negros'],
+    [15, 'Hueso', 'rojos y negros'],
     [16, 'Azul claro', 'blancos y negros'],
     [17, 'Amarillo', 'blancos y negros'],
     [18, 'Rosado', 'blancos y negros'],
     [19, 'Terracota', 'amarillos, blancos y rojos'],
     [20, 'Verde', 'blancos, verdes oscuros y rojos'],
-    [21, 'Verde de la foto 02', 'blancos y negros'],
+    [21, 'Verde', 'blancos y negros'],
   ].map(([id, background, grains]) => ({
     id, background, grains,
     number: String(id).padStart(2, '0'),
@@ -91,9 +91,9 @@
   }
 
   function description(finish) {
-    return `Fondo ${finish.background} · ` + (finish.grains === null
-      ? 'Sin granos · Textura fina de arena'
-      : `Granos ${finish.grains}`);
+    return `Fondo ${finish.background.toLowerCase()}` + (finish.grains === null
+      ? ''
+      : ` con granos ${finish.grains.replace(/^todos /, '')}`);
   }
 
   function quote(finish) {
@@ -104,7 +104,7 @@
 
   function renderPalette() {
     palette.dataset.palette = 'pedestal';
-    document.querySelector('.product-palette-heading>span').textContent = 'Acabados · Fotos 01 a 04';
+    document.querySelector('.product-palette-heading>span').textContent = 'Acabados';
     palette.replaceChildren(...definitions.map(finish => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -144,8 +144,7 @@
     note.hidden = false;
     if (palette.dataset.palette !== 'pedestal') renderPalette();
     const photo = photos[index];
-    document.querySelector('.product-palette-heading>span').textContent = photo
-      ? `Acabados · Foto ${photo.number}` : 'Acabados · Fotos 01 a 04';
+    document.querySelector('.product-palette-heading>span').textContent = 'Acabados';
     const image = photo ? track.children[index]?.querySelector('img') : null;
     if (image !== currentImage) {
       version++;
@@ -161,13 +160,14 @@
     }
     updateButtons();
     if (!photo) {
-      note.textContent = 'Acabados disponibles en las fotos 01 a 04.';
+      note.textContent = '';
+      note.hidden = true;
       return;
     }
     const finish = definitions.find(item => item.id === selected);
     quote(finish);
     if (image?.dataset.finish === String(selected)) {
-      note.textContent = selected === photo.original ? `Acabado ${finish.number} · Foto original` : `Acabado ${finish.number} · ${description(finish)}`;
+      note.textContent = description(finish);
     }
   }
 
@@ -178,7 +178,6 @@
     const source = imageSource(photoIndex, id);
     const request = ++version;
     const image = track.children[photoIndex]?.querySelector('img');
-    note.textContent = `Cargando acabado ${finish.number}…`;
     try {
       if (!loaded.has(source)) {
         const preload = new Image();
@@ -190,7 +189,7 @@
       selected = id;
       updateButtons();
       quote(finish);
-      note.textContent = `Acabado ${finish.number} · ${description(finish)}`;
+      note.textContent = description(finish);
       if (!await transitionFinish(image, source, request)) return;
       image.dataset.finish = id;
       image.classList.add('pedestal-photo-preview');

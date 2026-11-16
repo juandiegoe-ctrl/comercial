@@ -1,4 +1,4 @@
-/* Photo 01: each finish has separately specified matrix and aggregate colors. */
+/* Photos 01 and 02: separately specified matrix and aggregate colors. */
 (() => {
   const definitions = [
     [1, 'Rojo', null],
@@ -7,7 +7,7 @@
     [4, 'Gris', null],
     [5, 'Gris oscuro', null],
     [6, 'Blanco', 'blancos, negros y grises'],
-    [7, 'Original', 'los de la foto original'],
+    [7, 'Hueso', 'rojos, negros y grises'],
     [8, 'Hueso original', 'todos blancos'],
     [9, 'Blanco', 'blancos, verdes y azules'],
     [10, 'Blanco', 'grises y rosados'],
@@ -25,7 +25,6 @@
   ].map(([id, background, grains]) => ({
     id, background, grains,
     number: String(id).padStart(2, '0'),
-    image: id === 7 ? 'assets/pedestal_01.webp' : `assets/pedestal_01_acabado_${String(id).padStart(2, '0')}.png`,
     sample: id === 21 ? 'assets/color_21.png' : `assets/color_${String(id).padStart(2, '0')}.webp`,
   }));
   const palette = document.querySelector('.product-colors-scroll');
@@ -37,6 +36,17 @@
   let version = 0;
   let currentImage = null;
   const loaded = new Map();
+  const photos = [
+    { number: '01', original: 7 },
+    { number: '02', original: 21 },
+  ];
+
+  function imageSource(photoIndex, finishId) {
+    const photo = photos[photoIndex];
+    return finishId === photo.original
+      ? `assets/pedestal_${photo.number}.webp`
+      : `assets/pedestal_${photo.number}_acabado_${String(finishId).padStart(2, '0')}.png`;
+  }
 
   function description(finish) {
     return `Fondo ${finish.background} · ` + (finish.grains === null
@@ -46,13 +56,13 @@
 
   function quote(finish) {
     document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent(
-      `Hola, quiero cotizar: Lavamanos de pedestal. Acabado ${finish.number}. ${description(finish)}.`
+      `Hola, quiero cotizar: Lavamanos de pedestal. Foto ${photos[index].number}. Acabado ${finish.number}. ${description(finish)}.`
     );
   }
 
   function renderPalette() {
     palette.dataset.palette = 'pedestal';
-    document.querySelector('.product-palette-heading>span').textContent = 'Acabados · Foto 01';
+    document.querySelector('.product-palette-heading>span').textContent = 'Acabados · Fotos 01 y 02';
     palette.replaceChildren(...definitions.map(finish => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -75,7 +85,8 @@
 
   function updateButtons() {
     palette.querySelectorAll('[data-pedestal-finish]').forEach(button => {
-      button.setAttribute('aria-pressed', String(index === 0 && Number(button.dataset.pedestalFinish) === selected));
+      button.disabled = !photos[index];
+      button.setAttribute('aria-pressed', String(!!photos[index] && Number(button.dataset.pedestalFinish) === selected));
     });
   }
 
@@ -89,50 +100,54 @@
     }
     note.hidden = false;
     if (palette.dataset.palette !== 'pedestal') renderPalette();
-    const image = track.children[0]?.querySelector('img');
+    const photo = photos[index];
+    document.querySelector('.product-palette-heading>span').textContent = photo
+      ? `Acabados · Foto ${photo.number}` : 'Acabados · Fotos 01 y 02';
+    const image = photo ? track.children[index]?.querySelector('img') : null;
     if (image !== currentImage) {
       version++;
       currentImage = image;
-      selected = 7;
+      selected = photo?.original ?? 7;
       if (image) {
-        image.src = 'assets/pedestal_01.webp';
-        image.dataset.finish = '7';
-        image.alt = 'Lavamanos de pedestal — fotografía 1';
+        image.src = imageSource(index, selected);
+        image.dataset.finish = selected;
+        image.alt = `Lavamanos de pedestal — fotografía ${photo.number}`;
         image.classList.remove('pedestal-photo-preview');
       }
     }
     updateButtons();
-    if (index !== 0) {
-      note.textContent = 'Selecciona un acabado para verlo en la foto 01.';
+    if (!photo) {
+      note.textContent = 'Acabados disponibles en las fotos 01 y 02.';
       return;
     }
     const finish = definitions.find(item => item.id === selected);
     quote(finish);
-    if (image?.dataset.finish === String(selected) || selected === 7) {
-      note.textContent = selected === 7 ? 'Acabado 07 · Foto original' : `Acabado ${finish.number} · ${description(finish)}`;
+    if (image?.dataset.finish === String(selected)) {
+      note.textContent = selected === photo.original ? `Acabado ${finish.number} · Foto original` : `Acabado ${finish.number} · ${description(finish)}`;
     }
   }
 
   async function select(id) {
     const finish = definitions.find(item => item.id === id);
-    if (!finish || active !== 'pedestal') return;
+    if (!finish || active !== 'pedestal' || !photos[index]) return;
+    const photoIndex = index;
+    const source = imageSource(photoIndex, id);
     const request = ++version;
-    const image = track.children[0]?.querySelector('img');
+    const image = track.children[photoIndex]?.querySelector('img');
     note.textContent = `Cargando acabado ${finish.number}…`;
     try {
-      if (!loaded.has(id)) {
+      if (!loaded.has(source)) {
         const preload = new Image();
-        preload.src = finish.image;
-        loaded.set(id, preload.decode().catch(error => { loaded.delete(id); throw error; }));
+        preload.src = source;
+        loaded.set(source, preload.decode().catch(error => { loaded.delete(source); throw error; }));
       }
-      await loaded.get(id);
-      if (request !== version || active !== 'pedestal' || !track.contains(image)) return;
+      await loaded.get(source);
+      if (request !== version || active !== 'pedestal' || index !== photoIndex || !track.contains(image)) return;
       selected = id;
-      image.src = finish.image;
+      image.src = source;
       image.dataset.finish = id;
       image.classList.add('pedestal-photo-preview');
-      image.alt = `Lavamanos de pedestal · Acabado ${finish.number} · ${description(finish)}`;
-      index = 0;
+      image.alt = `Lavamanos de pedestal · Foto ${photos[photoIndex].number} · Acabado ${finish.number} · ${description(finish)}`;
       render();
     } catch {
       if (request === version) note.textContent = 'No se pudo cargar el acabado. Pulsa la muestra para reintentar.';

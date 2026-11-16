@@ -42,6 +42,46 @@
     { number: '03', original: 2 },
   ];
 
+  function clearTransitions() {
+    track.querySelectorAll('.pedestal-finish-overlay').forEach(overlay => {
+      overlay.getAnimations().forEach(animation => animation.cancel());
+      overlay.remove();
+    });
+  }
+
+  async function transitionFinish(image, source, request) {
+    const slide = image.parentElement;
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const overlay = new Image();
+      overlay.className = 'pedestal-finish-overlay';
+      overlay.alt = '';
+      overlay.setAttribute('aria-hidden', 'true');
+      overlay.src = source;
+      await overlay.decode();
+      if (request !== version || !track.contains(image)) return false;
+      // Keep an interrupted fade visible while the next image fades over it.
+      slide.querySelectorAll('.pedestal-finish-overlay').forEach(previous => {
+        const opacity = getComputedStyle(previous).opacity;
+        previous.getAnimations().forEach(animation => animation.cancel());
+        previous.style.opacity = opacity;
+      });
+      overlay.style.opacity = '0';
+      slide.append(overlay);
+      await overlay.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 450, easing: 'ease-in-out', fill: 'forwards',
+      }).finished;
+      if (request !== version || !track.contains(image)) return false;
+    }
+    image.src = source;
+    await image.decode();
+    if (request !== version || !track.contains(image)) return false;
+    slide.querySelectorAll('.pedestal-finish-overlay').forEach(overlay => {
+      overlay.getAnimations().forEach(animation => animation.cancel());
+      overlay.remove();
+    });
+    return true;
+  }
+
   function imageSource(photoIndex, finishId) {
     const photo = photos[photoIndex];
     return finishId === photo.original
@@ -94,6 +134,7 @@
   function sync() {
     if (active !== 'pedestal') {
       version++;
+      clearTransitions();
       currentImage = null;
       selected = 7;
       note.hidden = true;
@@ -107,6 +148,7 @@
     const image = photo ? track.children[index]?.querySelector('img') : null;
     if (image !== currentImage) {
       version++;
+      clearTransitions();
       currentImage = image;
       selected = photo?.original ?? 7;
       if (image) {
@@ -145,7 +187,10 @@
       await loaded.get(source);
       if (request !== version || active !== 'pedestal' || index !== photoIndex || !track.contains(image)) return;
       selected = id;
-      image.src = source;
+      updateButtons();
+      quote(finish);
+      note.textContent = `Acabado ${finish.number} · ${description(finish)}`;
+      if (!await transitionFinish(image, source, request)) return;
       image.dataset.finish = id;
       image.classList.add('pedestal-photo-preview');
       image.alt = `Lavamanos de pedestal · Foto ${photos[photoIndex].number} · Acabado ${finish.number} · ${description(finish)}`;

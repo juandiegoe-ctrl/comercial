@@ -1,4 +1,4 @@
-/* Photos 01 and 02: separately specified matrix and aggregate colors. */
+/* Photos 01–03: separately specified matrix and aggregate colors. */
 (() => {
   const definitions = [
     [1, 'Rojo', null],
@@ -39,6 +39,7 @@
   const photos = [
     { number: '01', original: 7 },
     { number: '02', original: 21 },
+    { number: '03', original: 2 },
   ];
 
   function imageSource(photoIndex, finishId) {
@@ -62,7 +63,7 @@
 
   function renderPalette() {
     palette.dataset.palette = 'pedestal';
-    document.querySelector('.product-palette-heading>span').textContent = 'Acabados · Fotos 01 y 02';
+    document.querySelector('.product-palette-heading>span').textContent = 'Acabados · Fotos 01 a 03';
     palette.replaceChildren(...definitions.map(finish => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -102,7 +103,7 @@
     if (palette.dataset.palette !== 'pedestal') renderPalette();
     const photo = photos[index];
     document.querySelector('.product-palette-heading>span').textContent = photo
-      ? `Acabados · Foto ${photo.number}` : 'Acabados · Fotos 01 y 02';
+      ? `Acabados · Foto ${photo.number}` : 'Acabados · Fotos 01 a 03';
     const image = photo ? track.children[index]?.querySelector('img') : null;
     if (image !== currentImage) {
       version++;
@@ -117,7 +118,7 @@
     }
     updateButtons();
     if (!photo) {
-      note.textContent = 'Acabados disponibles en las fotos 01 y 02.';
+      note.textContent = 'Acabados disponibles en las fotos 01 a 03.';
       return;
     }
     const finish = definitions.find(item => item.id === selected);

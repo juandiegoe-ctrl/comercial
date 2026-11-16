@@ -1,4 +1,4 @@
-/* Photos 01–04: separately specified matrix and aggregate colors. */
+/* Shared material previews for pedestal and countertop vessel sinks. */
 (() => {
   const definitions = [
     [1, 'Rojo', null],
@@ -36,12 +36,21 @@
   let version = 0;
   let currentImage = null;
   const loaded = new Map();
-  const photos = [
-    { number: '01', original: 7 },
-    { number: '02', original: 21 },
-    { number: '03', original: 2 },
-    { number: '04', original: 4, source: 'assets/pedestal_ambiente_04.webp', counter: true },
-  ];
+  const products = {
+    pedestal: {
+      name: 'Lavamanos de pedestal',
+      photos: [
+        { number: '01', original: 7 },
+        { number: '02', original: 21 },
+        { number: '03', original: 2 },
+        { number: '04', original: 4, source: 'assets/pedestal_ambiente_04.webp', counter: true },
+      ],
+    },
+    sobreponer: {
+      name: 'Lavamanos de sobreponer',
+      photos: [{ number: '01', original: 16 }],
+    },
+  };
 
   function clearTransitions() {
     track.querySelectorAll('.pedestal-finish-overlay').forEach(overlay => {
@@ -84,10 +93,10 @@
   }
 
   function imageSource(photoIndex, finishId) {
-    const photo = photos[photoIndex];
+    const photo = products[active].photos[photoIndex];
     return finishId === photo.original
-      ? photo.source || `assets/pedestal_${photo.number}.webp`
-      : `assets/pedestal_${photo.number}_acabado_${String(finishId).padStart(2, '0')}.png`;
+      ? photo.source || `assets/${active}_${photo.number}.webp`
+      : `assets/${active}_${photo.number}_acabado_${String(finishId).padStart(2, '0')}.png`;
   }
 
   function description(finish) {
@@ -97,13 +106,15 @@
   }
 
   function quote(finish) {
+    const product = products[active];
+    const photo = product.photos[index];
     document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent(
-      `Hola, quiero cotizar: Lavamanos de pedestal. Foto ${photos[index].number}. Acabado ${finish.number}. ${description(finish)}.${photos[index].counter ? ' Con mini mesón del mismo material.' : ''}`
+      `Hola, quiero cotizar: ${product.name}. Foto ${photo.number}. Acabado ${finish.number}. ${description(finish)}.${photo.counter ? ' Con mini mesón del mismo material.' : ''}`
     );
   }
 
   function renderPalette() {
-    palette.dataset.palette = 'pedestal';
+    palette.dataset.palette = active;
     document.querySelector('.product-palette-heading>span').textContent = 'Acabados';
     palette.replaceChildren(...definitions.map(finish => {
       const button = document.createElement('button');
@@ -127,13 +138,13 @@
 
   function updateButtons() {
     palette.querySelectorAll('[data-pedestal-finish]').forEach(button => {
-      button.disabled = !photos[index];
-      button.setAttribute('aria-pressed', String(!!photos[index] && Number(button.dataset.pedestalFinish) === selected));
+      button.disabled = !products[active]?.photos[index];
+      button.setAttribute('aria-pressed', String(!!products[active]?.photos[index] && Number(button.dataset.pedestalFinish) === selected));
     });
   }
 
   function sync() {
-    if (active !== 'pedestal') {
+    if (!products[active]) {
       version++;
       clearTransitions();
       currentImage = null;
@@ -142,8 +153,8 @@
       return;
     }
     note.hidden = false;
-    if (palette.dataset.palette !== 'pedestal') renderPalette();
-    const photo = photos[index];
+    if (palette.dataset.palette !== active) renderPalette();
+    const photo = products[active].photos[index];
     document.querySelector('.product-palette-heading>span').textContent = 'Acabados';
     const image = photo ? track.children[index]?.querySelector('img') : null;
     if (image !== currentImage) {
@@ -154,7 +165,7 @@
       if (image) {
         image.src = imageSource(index, selected);
         image.dataset.finish = selected;
-        image.alt = `Lavamanos de pedestal — fotografía ${photo.number}`;
+        image.alt = `${products[active].name} — fotografía ${photo.number}`;
         image.classList.remove('pedestal-photo-preview');
       }
     }
@@ -173,7 +184,9 @@
 
   async function select(id) {
     const finish = definitions.find(item => item.id === id);
-    if (!finish || active !== 'pedestal' || !photos[index]) return;
+    if (!finish || !products[active]?.photos[index]) return;
+    const productKey = active;
+    const product = products[productKey];
     const photoIndex = index;
     const source = imageSource(photoIndex, id);
     const request = ++version;
@@ -185,7 +198,7 @@
         loaded.set(source, preload.decode().catch(error => { loaded.delete(source); throw error; }));
       }
       await loaded.get(source);
-      if (request !== version || active !== 'pedestal' || index !== photoIndex || !track.contains(image)) return;
+      if (request !== version || active !== productKey || index !== photoIndex || !track.contains(image)) return;
       selected = id;
       updateButtons();
       quote(finish);
@@ -193,7 +206,7 @@
       if (!await transitionFinish(image, source, request)) return;
       image.dataset.finish = id;
       image.classList.add('pedestal-photo-preview');
-      image.alt = `Lavamanos de pedestal · Foto ${photos[photoIndex].number} · Acabado ${finish.number} · ${description(finish)}`;
+      image.alt = `${product.name} · Foto ${product.photos[photoIndex].number} · Acabado ${finish.number} · ${description(finish)}`;
       render();
     } catch {
       if (request === version) note.textContent = 'No se pudo cargar el acabado. Pulsa la muestra para reintentar.';

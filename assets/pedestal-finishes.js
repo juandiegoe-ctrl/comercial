@@ -1,4 +1,4 @@
-/* Photos 01–03: separately specified matrix and aggregate colors. */
+/* Photos 01–04: separately specified matrix and aggregate colors. */
 (() => {
   const definitions = [
     [1, 'Rojo', null],
@@ -40,6 +40,7 @@
     { number: '01', original: 7 },
     { number: '02', original: 21 },
     { number: '03', original: 2 },
+    { number: '04', original: 4, source: 'assets/pedestal_ambiente_04.webp', counter: true },
   ];
 
   function clearTransitions() {
@@ -85,7 +86,7 @@
   function imageSource(photoIndex, finishId) {
     const photo = photos[photoIndex];
     return finishId === photo.original
-      ? `assets/pedestal_${photo.number}.webp`
+      ? photo.source || `assets/pedestal_${photo.number}.webp`
       : `assets/pedestal_${photo.number}_acabado_${String(finishId).padStart(2, '0')}.png`;
   }
 
@@ -97,13 +98,13 @@
 
   function quote(finish) {
     document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent(
-      `Hola, quiero cotizar: Lavamanos de pedestal. Foto ${photos[index].number}. Acabado ${finish.number}. ${description(finish)}.`
+      `Hola, quiero cotizar: Lavamanos de pedestal. Foto ${photos[index].number}. Acabado ${finish.number}. ${description(finish)}.${photos[index].counter ? ' Con mini mesón del mismo material.' : ''}`
     );
   }
 
   function renderPalette() {
     palette.dataset.palette = 'pedestal';
-    document.querySelector('.product-palette-heading>span').textContent = 'Acabados · Fotos 01 a 03';
+    document.querySelector('.product-palette-heading>span').textContent = 'Acabados · Fotos 01 a 04';
     palette.replaceChildren(...definitions.map(finish => {
       const button = document.createElement('button');
       button.type = 'button';
@@ -144,7 +145,7 @@
     if (palette.dataset.palette !== 'pedestal') renderPalette();
     const photo = photos[index];
     document.querySelector('.product-palette-heading>span').textContent = photo
-      ? `Acabados · Foto ${photo.number}` : 'Acabados · Fotos 01 a 03';
+      ? `Acabados · Foto ${photo.number}` : 'Acabados · Fotos 01 a 04';
     const image = photo ? track.children[index]?.querySelector('img') : null;
     if (image !== currentImage) {
       version++;
@@ -160,7 +161,7 @@
     }
     updateButtons();
     if (!photo) {
-      note.textContent = 'Acabados disponibles en las fotos 01 a 03.';
+      note.textContent = 'Acabados disponibles en las fotos 01 a 04.';
       return;
     }
     const finish = definitions.find(item => item.id === selected);

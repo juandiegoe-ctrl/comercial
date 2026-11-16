@@ -52,6 +52,10 @@
         { number: '01', original: 16 },
         { number: '02', original: 20 },
         { number: '03', original: 2 },
+        { number: '04', original: null, source: 'assets/sobreponer_amarillo.webp', extension: 'webp' },
+        { number: '05', original: 11, source: 'assets/sobreponer_ambiente.webp', extension: 'webp' },
+        { number: '06', original: 3, source: 'assets/sobreponer_hueso.webp', extension: 'webp' },
+        { number: '07', original: 4, source: 'assets/sobreponer_terrazo_claro.webp', extension: 'webp' },
       ],
     },
   };
@@ -100,7 +104,7 @@
     const photo = products[active].photos[photoIndex];
     return finishId === photo.original
       ? photo.source || `assets/${active}_${photo.number}.webp`
-      : `assets/${active}_${photo.number}_acabado_${String(finishId).padStart(2, '0')}.png`;
+      : `assets/${active}_${photo.number}_acabado_${String(finishId).padStart(2, '0')}.${photo.extension || 'png'}`;
   }
 
   function description(finish) {
@@ -165,10 +169,10 @@
       version++;
       clearTransitions();
       currentImage = image;
-      selected = photo?.original ?? 7;
+      selected = photo ? photo.original : null;
       if (image) {
         image.src = imageSource(index, selected);
-        image.dataset.finish = selected;
+        image.dataset.finish = selected === null ? '' : selected;
         image.alt = `${products[active].name} — fotografía ${photo.number}`;
         image.classList.remove('pedestal-photo-preview');
       }
@@ -177,6 +181,14 @@
     if (!photo) {
       note.textContent = '';
       note.hidden = true;
+      return;
+    }
+    if (selected === null) {
+      note.textContent = '';
+      note.hidden = false;
+      document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent(
+        `Hola, quiero cotizar: ${products[active].name}. Foto ${photo.number}.`
+      );
       return;
     }
     const finish = definitions.find(item => item.id === selected);
@@ -204,6 +216,7 @@
       await loaded.get(source);
       if (request !== version || active !== productKey || index !== photoIndex || !track.contains(image)) return;
       selected = id;
+      note.hidden = false;
       updateButtons();
       quote(finish);
       note.textContent = description(finish);

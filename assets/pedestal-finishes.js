@@ -26,7 +26,7 @@
     id, background, grains,
     number: String(id).padStart(2, '0'),
     image: id === 7 ? 'assets/pedestal_01.webp' : `assets/pedestal_01_acabado_${String(id).padStart(2, '0')}.png`,
-    sample: id === 21 ? 'assets/pedestal_02.webp' : `assets/color_${String(id).padStart(2, '0')}.webp`,
+    sample: id === 21 ? 'assets/color_21.png' : `assets/color_${String(id).padStart(2, '0')}.webp`,
   }));
   const palette = document.querySelector('.product-colors-scroll');
   const note = document.createElement('p');

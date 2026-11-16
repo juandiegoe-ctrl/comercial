@@ -48,7 +48,11 @@
     },
     sobreponer: {
       name: 'Lavamanos de sobreponer',
-      photos: [{ number: '01', original: 16 }],
+      photos: [
+        { number: '01', original: 16 },
+        { number: '02', original: 20 },
+        { number: '03', original: 2 },
+      ],
     },
   };
 

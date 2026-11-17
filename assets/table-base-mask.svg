@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1671" viewBox="0 0 1800 1671">
   <defs>
     <filter id="feather" x="-15%" y="-15%" width="130%" height="130%"><feGaussianBlur stdDeviation="7"/></filter>
-    <clipPath id="under-table"><path d="M0 960H1800V1671H0Z"/></clipPath>
+    <clipPath id="under-table"><path d="M0 986H854Q862 986 868 983Q925 977 982 983Q990 986 1000 986H1800V1671H0Z"/></clipPath>
   </defs>
   <!-- Include the photographed rim and contact shadow, blending into the gravel. -->
   <g clip-path="url(#under-table)"><path fill="white" filter="url(#feather)" d="M843 933H1005V1057C1155 1090 1248 1217 1248 1335C1248 1493 1109 1610 935 1610C761 1610 616 1493 616 1335C616 1200 712 1086 843 1057Z"/></g>

@@ -235,5 +235,5 @@
     const button = event.target.closest('[data-pedestal-finish]');
     if (button) select(Number(button.dataset.pedestalFinish));
   });
-  window.pedestalFinishes = { sync, renderPalette };
+  window.pedestalFinishes = { sync, renderPalette, definitions, description };
 })();

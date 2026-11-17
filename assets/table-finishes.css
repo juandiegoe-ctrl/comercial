@@ -20,6 +20,11 @@
 .table-finish-button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .table-finish-button .swatch-meta{display:block}
 .product-panel[data-table-configurator="true"] .product-palette{margin-top:14px}
+@media(min-width:851px){
+ .product-panel[data-table-gallery="true"]{height:auto}
+ .product-panel[data-table-gallery="true"] .product-body{height:auto}
+ .product-panel[data-table-gallery="true"] .product-aside{max-height:83.55dvh;overflow-y:auto}
+}
 @media(max-width:850px){
  .product-panel[data-table-gallery="true"]{height:calc(100dvh - 20px)}
  .product-panel[data-table-gallery="true"] .product-visual{width:min(100%,max(210px,calc(100dvh - 540px)))}

@@ -56,6 +56,7 @@
         { number: '05', original: 11, source: 'assets/sobreponer_ambiente.webp', extension: 'webp' },
         { number: '06', original: 3, source: 'assets/sobreponer_hueso.webp', extension: 'webp' },
         { number: '07', original: 4, source: 'assets/sobreponer_terrazo_claro.webp', extension: 'webp' },
+        { number: '08', original: 10, source: 'assets/sobreponer_ambiente_calido_01.webp', extension: 'webp' },
       ],
     },
   };

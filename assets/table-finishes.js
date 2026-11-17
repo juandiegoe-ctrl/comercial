@@ -213,26 +213,6 @@
     }
   }
 
-  function roundedBaseCap(image) {
-    // Sample the photographed cylinder so the small rounded join matches each paint.
-    const canvas = document.createElement('canvas');
-    canvas.width = 6;
-    canvas.height = 1;
-    const context = canvas.getContext('2d', { willReadFrequently: true });
-    const stops = [868, 890, 915, 940, 963, 980].map((x, i) => {
-      context.drawImage(image, Math.round(x / 1800 * image.naturalWidth), Math.round(1000 / 1671 * image.naturalHeight), 1, 1, i, 0, 1, 1);
-      const pixel = context.getImageData(i, 0, 1, 1).data;
-      return `<stop offset="${i / 5}" stop-color="rgb(${pixel[0]},${pixel[1]},${pixel[2]})"/>`;
-    }).join('');
-    const shape = 'M866 1044V958C896 978 954 978 984 958V1044Z';
-    const contact = 'M866 953H984V958C954 978 896 978 866 958Z';
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1671" viewBox="0 0 1800 1671"><defs><linearGradient id="paint" x1="860" x2="988" y1="0" y2="0" gradientUnits="userSpaceOnUse">${stops}</linearGradient><linearGradient id="shadow" x1="0" x2="0" y1="951" y2="1004" gradientUnits="userSpaceOnUse"><stop stop-color="#10100e" stop-opacity=".48"/><stop offset=".35" stop-color="#10100e" stop-opacity=".24"/><stop offset=".7" stop-color="#10100e" stop-opacity=".06"/><stop offset="1" stop-color="#10100e" stop-opacity="0"/></linearGradient><linearGradient id="contact" x1="0" x2="0" y1="953" y2="976" gradientUnits="userSpaceOnUse"><stop stop-color="#10100e" stop-opacity=".72"/><stop offset="1" stop-color="#10100e" stop-opacity=".48"/></linearGradient><linearGradient id="fade" x1="0" x2="0" y1="994" y2="1036" gradientUnits="userSpaceOnUse"><stop stop-color="white"/><stop offset="1" stop-color="white" stop-opacity="0"/></linearGradient><mask id="blend"><path d="M850 940H1000V1050H850Z" fill="url(#fade)"/></mask></defs><g mask="url(#blend)"><path d="${contact}" fill="url(#paint)"/><path d="${contact}" fill="url(#contact)"/><path d="${shape}" fill="url(#paint)"/><path d="${shape}" fill="url(#shadow)"/></g></svg>`;
-    const cap = document.createElement('span');
-    cap.className = 'table-base-cap';
-    cap.style.backgroundImage = `url('data:image/svg+xml,${encodeURIComponent(svg)}')`;
-    return cap;
-  }
-
   async function selectBase(id) {
     const color = baseColors.find(item => item.id === id);
     if (!supported() || !color) return;
@@ -247,7 +227,7 @@
     try {
       await image.decode();
       if (request !== baseVersion || !supported() || slide !== currentSlide) return;
-      const previous = Array.from(scene.querySelectorAll('.table-base-layer'));
+      const previous = Array.from(scene.querySelectorAll('.table-base-photo'));
       previous.forEach(previousImage => {
         const opacity = getComputedStyle(previousImage).opacity;
         previousImage.getAnimations().forEach(animation => animation.cancel());
@@ -255,17 +235,14 @@
       });
       baseId = id;
       updateControls();
-      const layer = document.createElement('div');
-      layer.className = 'table-base-layer';
-      layer.append(image, roundedBaseCap(image));
-      layer.style.opacity = '0';
-      scene.append(layer);
+      image.style.opacity = '0';
+      scene.append(image);
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        await layer.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 450, easing: 'ease-in-out', fill: 'forwards' }).finished;
+        await image.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 450, easing: 'ease-in-out', fill: 'forwards' }).finished;
       }
       if (request !== baseVersion || !supported() || slide !== currentSlide) return;
-      layer.style.opacity = '1';
-      layer.getAnimations().forEach(animation => animation.cancel());
+      image.style.opacity = '1';
+      image.getAnimations().forEach(animation => animation.cancel());
       previous.forEach(previousImage => previousImage.remove());
       slide.dataset.tablePreviewBase = id;
     } catch {

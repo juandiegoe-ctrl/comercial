@@ -220,15 +220,10 @@
     const slide = currentSlide;
     const scene = setupScene(slide);
     const image = new Image();
-    image.src = original;
+    image.src = `assets/mesas_01_base_${id}.webp`;
     image.alt = '';
     image.className = 'table-base-photo';
-    // The original photograph supplies the metal's highlights and shadows.
-    const rgb = color.hex.match(/[a-f\d]{2}/gi).map(channel => parseInt(channel, 16) / 255);
-    const matrix = rgb.flatMap(channel => [channel * .15945, channel * .5364, channel * .05415, 0, channel * .5]);
-    matrix.push(0, 0, 0, 1, 0);
-    const filter = `<svg xmlns="http://www.w3.org/2000/svg"><filter id="tint" color-interpolation-filters="sRGB"><feColorMatrix type="matrix" values="${matrix.join(' ')}"/></filter></svg>`;
-    image.style.filter = `url('data:image/svg+xml,${encodeURIComponent(filter)}#tint')`;
+    // Photographic variants retain the column's volume, metal rim and contact shadow.
     try {
       await image.decode();
       if (request !== baseVersion || !supported() || slide !== currentSlide) return;

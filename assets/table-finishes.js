@@ -10,9 +10,9 @@
   note.hidden = true;
   palette.after(note);
   const baseColors = [
-    { id: 'blanco', name: 'Blanco', hex: '#efeee8' },
+    { id: 'blanco', name: 'Blanco', hex: '#fafafa' },
     { id: 'negro', name: 'Negro', hex: '#202221' },
-    { id: 'almendra', name: 'Almendra', hex: '#d9cdb5' },
+    { id: 'almendra', name: 'Almendra', hex: '#eeebe4' },
     { id: 'vinotinto', name: 'Vinotinto', hex: '#6b2438' },
     { id: 'verde-militar', name: 'Verde militar', hex: '#505c3f' },
     { id: 'azul-rey', name: 'Azul rey', hex: '#2049b4' },

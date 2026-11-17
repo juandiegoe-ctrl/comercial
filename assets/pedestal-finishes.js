@@ -1,4 +1,4 @@
-/* Shared material previews for pedestal and countertop vessel sinks. */
+/* Shared material previews for pedestal, vessel and rectangular sinks. */
 (() => {
   const definitions = [
     [1, 'Rojo', null],
@@ -57,6 +57,18 @@
         { number: '06', original: 3, source: 'assets/sobreponer_hueso.webp', extension: 'webp' },
         { number: '07', original: 4, source: 'assets/sobreponer_terrazo_claro.webp', extension: 'webp' },
         { number: '08', original: 10, source: 'assets/sobreponer_ambiente_calido_01.webp', extension: 'webp' },
+      ],
+    },
+    rectangulares: {
+      name: 'Lavamanos rectangulares',
+      photos: [
+        { number: '01', original: 21, extension: 'webp' },
+        { number: '02', original: 4, extension: 'webp' },
+        { number: '03', original: 4, extension: 'webp' },
+        { number: '04', original: 7, extension: 'webp' },
+        { number: '05', original: 21, extension: 'webp' },
+        { number: '06', original: null, extension: 'webp' },
+        { number: '07', original: null, extension: 'webp' },
       ],
     },
   };

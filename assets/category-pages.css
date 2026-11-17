@@ -1,0 +1,22 @@
+.category-links{max-width:1900px;margin:0 auto;padding:35px clamp(16px,3vw,54px) 65px}
+.category-links h2{font-size:24px;font-weight:400;letter-spacing:-.035em;margin:0 0 22px}
+.category-links nav{display:flex;flex-wrap:wrap;gap:16px 28px}
+.category-links a{font-size:13px;border-bottom:1px solid #a4a29b;padding-bottom:5px}
+.category-intro{max-width:1400px;margin:auto;padding:45px clamp(22px,7vw,120px) 60px}
+.breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;font-size:11px;color:var(--muted);margin-bottom:60px}
+.breadcrumbs a{text-decoration:underline;text-underline-offset:3px}
+.category-intro h1{font-size:clamp(48px,7vw,104px);line-height:1.01;max-width:1100px;margin:24px 0 30px;letter-spacing:-.06em}
+.category-intro>p{font-size:clamp(16px,1.5vw,21px);line-height:1.6;max-width:750px;margin:0 0 26px}
+.category-actions{display:flex;flex-wrap:wrap;gap:15px 26px;align-items:center}
+.category-actions button{border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:14px 20px;cursor:pointer}
+.category-actions a{font-size:14px;text-decoration:underline;text-underline-offset:5px}
+.category-photo{display:block;width:calc(100% - clamp(32px,6vw,108px));max-width:1600px;margin:0 auto;border:0;padding:0;cursor:pointer;background:#e8e5df;position:relative;text-align:left;color:#fff}
+.category-photo img{display:block;width:100%;height:auto;max-height:85vh;object-fit:cover}
+.category-photo span{position:absolute;bottom:22px;left:22px;background:#252621df;padding:12px 16px;font-size:13px}
+.category-copy{max-width:1200px;margin:auto;padding:75px clamp(22px,7vw,80px);display:grid;grid-template-columns:1fr 1fr;gap:45px 65px}
+.category-copy h2{font-size:clamp(27px,3vw,38px);font-weight:400;letter-spacing:-.04em;line-height:1.1;margin:0 0 20px}
+.category-copy p,.category-copy li{font-size:16px;line-height:1.75;color:#55564e}
+.category-copy ul{padding-left:20px}
+.category-copy .category-faq{grid-column:1/-1;border-top:1px solid #a4a29b;padding-top:35px}
+.category-faq h3{font-size:18px;font-weight:400;margin:26px 0 10px}
+@media(max-width:850px){.category-intro{padding:28px 22px 40px}.breadcrumbs{margin-bottom:35px}.category-photo{width:100%;margin-inline:0}.category-photo img{max-height:none}.category-copy{grid-template-columns:1fr;padding:45px 22px;gap:30px}.category-links{padding-inline:22px}.category-links nav{flex-direction:column;align-items:start}}

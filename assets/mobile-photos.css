@@ -1,0 +1,25 @@
+/* Give product photography the full mobile viewport width. */
+@media (max-width: 850px) {
+  .collection { padding-inline: 0; }
+  .collection > .section-label { margin-inline: 14px; }
+  .feature { margin-inline: 0; }
+
+  .lightbox { padding: 0; }
+  .product-panel,
+  .product-panel[data-table-gallery="true"] {
+    width: 100%;
+    height: auto;
+    max-height: 100dvh;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+  .product-body,
+  .product-panel[data-table-gallery="true"] .product-body {
+    height: auto;
+  }
+  .product-visual,
+  .product-panel[data-table-gallery="true"] .product-visual {
+    width: 100%;
+    flex-shrink: 0;
+  }
+}

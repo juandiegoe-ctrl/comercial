@@ -1,4 +1,4 @@
-/* Shared material previews for pedestal, vessel and rectangular sinks. */
+/* Shared material previews for sinks and countertops. */
 (() => {
   const definitions = [
     [1, 'Rojo', null],
@@ -37,6 +37,14 @@
   let currentImage = null;
   const loaded = new Map();
   const products = {
+    mesones: {
+      name: 'Mesones',
+      photos: [
+        { number: '01', original: 15, extension: 'webp' },
+        { number: '02', original: 13, extension: 'webp' },
+        { number: '03', original: 15, extension: 'webp' },
+      ],
+    },
     pedestal: {
       name: 'Lavamanos de pedestal',
       photos: [

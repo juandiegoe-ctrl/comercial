@@ -1,6 +1,8 @@
 /* All layers share the original photograph's coordinate system. */
 .table-scene{position:absolute;left:0;top:50%;width:100%;aspect-ratio:1800 / 1671;transform:translateY(-50%);isolation:isolate;pointer-events:none}
 .photo-stage .table-scene img{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;object-position:center;transform:none}
+.table-scene[data-table-photo]:not([data-table-photo="01"]){inset:0;height:100%;aspect-ratio:auto;transform:none}
+.photo-stage .table-scene[data-table-photo]:not([data-table-photo="01"]) img{object-fit:cover}
 .table-scene .table-top-photo{z-index:1}
 .table-scene .table-base-photo{z-index:2;mask:url('table-base-mask.svg') center / 100% 100% no-repeat;-webkit-mask:url('table-base-mask.svg') center / 100% 100% no-repeat}
 #gallery-track[data-gallery="mesas"] .gallery-slide:first-child>img{object-fit:contain;object-position:center}
@@ -19,7 +21,7 @@
 .table-finish-button[aria-pressed="true"] img{outline:2px solid var(--ink);outline-offset:-2px}
 .table-finish-button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .table-finish-button .swatch-meta{display:block}
-.product-panel[data-table-configurator="true"] .product-palette{margin-top:14px}
+.product-panel[data-table-configurator="true"] .product-palette{margin-top:auto}
 @media(min-width:851px){
  .product-panel[data-table-gallery="true"]{height:auto}
  .product-panel[data-table-gallery="true"] .product-body{height:auto}
@@ -27,8 +29,10 @@
 }
 @media(max-width:850px){
  .product-panel[data-table-gallery="true"]{height:calc(100dvh - 20px)}
+ .product-panel[data-table-gallery="true"] .product-body{height:100%}
+ .product-panel[data-table-gallery="true"] .product-aside{flex:1}
  .product-panel[data-table-gallery="true"] .product-visual{width:min(100%,max(210px,calc(100dvh - 540px)))}
- .product-panel[data-table-configurator="true"] .product-palette{margin-top:0}
+ .product-panel[data-table-configurator="true"] .product-palette{margin-top:auto}
  .table-base-controls{margin-top:8px}
  .table-base-heading{margin-bottom:5px}
  .table-base-button .base-sample{width:24px;height:24px}

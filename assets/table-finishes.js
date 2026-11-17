@@ -1,6 +1,10 @@
-/* Independent tabletop finishes and powder-coated metal base, photo 01 only. */
+/* Material finishes for table photos 01, 04 and 05; metal base on photo 01. */
 (() => {
-  const original = 'assets/mesas_01_acabado_06.webp';
+  const photos = {
+    0: { number: '01', original: 6, source: 'assets/mesas_01_acabado_06.webp', metal: true },
+    3: { number: '04', original: 8, source: 'assets/mesas_04.webp' },
+    4: { number: '05', original: 6, source: 'assets/mesas_05.webp' },
+  };
   const { definitions, description } = window.pedestalFinishes;
   const palette = document.querySelector('.product-colors-scroll');
   const panel = document.querySelector('.product-panel');
@@ -60,14 +64,16 @@
   let version = 0;
   let baseVersion = 0;
   const loaded = new Map();
-  const supported = () => active === 'mesas' && index === 0;
-  const source = id => id === 6 ? original : `assets/mesas_01_acabado_${String(id).padStart(2, '0')}.webp`;
+  const supported = () => active === 'mesas' && !!photos[index];
+  const source = id => id === photos[index].original ? photos[index].source
+    : `assets/mesas_${photos[index].number}_acabado_${String(id).padStart(2, '0')}.webp`;
 
   function updateQuote() {
     const finish = definitions.find(item => item.id === selected);
     const base = baseColors.find(item => item.id === baseId);
+    const photo = photos[index];
     document.querySelector('#product-quote').href = 'https://wa.me/573113900646?text=' + encodeURIComponent(
-      `Hola, quiero cotizar: Mesa de terrazo. Foto 01. Acabado ${finish.number}. ${description(finish)}. Base metálica con pintura electrostática${base ? ` color ${base.name.toLowerCase()}` : ''}. Formato cuadrado, redondo o rectangular y medidas según necesidad.`
+      `Hola, quiero cotizar: Mesa de terrazo. Foto ${photo.number}. Acabado ${finish.number}. ${description(finish)}.${photo.metal ? ` Base metálica con pintura electrostática${base ? ` color ${base.name.toLowerCase()}` : ''}. Formato cuadrado, redondo o rectangular y medidas según necesidad.` : ''}`
     );
   }
 
@@ -112,6 +118,7 @@
     if (scene) return scene;
     scene = document.createElement('div');
     scene.className = 'table-scene';
+    scene.dataset.tablePhoto = photos[index].number;
     scene.setAttribute('aria-hidden', 'true');
     slide.append(scene);
     return scene;
@@ -130,9 +137,9 @@
     const enabled = supported();
     panel.dataset.tableConfigurator = String(enabled);
     panel.dataset.tableGallery = String(active === 'mesas');
-    controls.hidden = !enabled;
+    controls.hidden = !enabled || !photos[index].metal;
     note.hidden = !enabled;
-    // Other table photos keep their own specifications and no interactive palette.
+    // Unsupported photos keep their own specifications and no interactive palette.
     if (active === 'mesas') document.querySelector('.product-palette').hidden = !enabled;
     else document.querySelector('.product-palette').hidden = false;
     if (!enabled) {
@@ -144,18 +151,20 @@
       }
       return;
     }
-    const slide = track.children[0];
+    const photo = photos[index];
+    const slide = track.children[index];
     if (currentSlide !== slide) {
       clearScene();
       currentSlide = slide;
-      selected = 6;
+      selected = photo.original;
       baseId = null;
-      slide.dataset.tablePreviewFinish = '6';
+      slide.dataset.tablePreviewFinish = String(selected);
       slide.dataset.tablePreviewBase = '';
       setupScene(slide);
     }
     if (palette.dataset.palette !== 'mesas') renderPalette();
-    document.querySelector('#tech-rows').replaceChildren(...technical.map(([key, value]) => technicalRow(key, value)));
+    document.querySelector('.product-palette-heading>span').textContent = photo.number === '04' ? 'Acabado de la mesa' : 'Acabado de la tapa';
+    document.querySelector('#tech-rows').replaceChildren(...(photo.metal ? technical : specs.mesas).map(([key, value]) => technicalRow(key, value)));
     updateControls();
   }
 
@@ -215,7 +224,7 @@
 
   async function selectBase(id) {
     const color = baseColors.find(item => item.id === id);
-    if (!supported() || !color) return;
+    if (!supported() || !photos[index].metal || !color) return;
     const request = ++baseVersion;
     const slide = currentSlide;
     const scene = setupScene(slide);

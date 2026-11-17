@@ -1,7 +1,7 @@
 /* Material finishes for table photos 01, 04 and 05; metal base on photo 01. */
 (() => {
   const photos = {
-    0: { number: '01', original: 6, source: 'assets/mesas_01_acabado_06.webp', metal: true },
+    0: { number: '01', original: 6, source: 'assets/mesas_03.webp', metal: true },
     3: { number: '04', original: 8, source: 'assets/mesas_04.webp' },
     4: { number: '05', original: 6, source: 'assets/mesas_05.webp' },
   };

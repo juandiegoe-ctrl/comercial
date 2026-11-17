@@ -1,6 +1,6 @@
 /* Independent tabletop finishes and powder-coated metal base, photo 01 only. */
 (() => {
-  const original = 'assets/mesas_03.webp';
+  const original = 'assets/mesas_01_acabado_06.webp';
   const { definitions, description } = window.pedestalFinishes;
   const palette = document.querySelector('.product-colors-scroll');
   const panel = document.querySelector('.product-panel');

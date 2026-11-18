@@ -65,7 +65,7 @@
   let baseVersion = 0;
   const loaded = new Map();
   const supported = () => active === 'mesas' && !!photos[index];
-  const source = id => id === photos[index].original ? photos[index].source
+  const source = id => id === photos[index].original ? catalogImageURL(photos[index].source)
     : `assets/mesas_${photos[index].number}_acabado_${String(id).padStart(2, '0')}.webp`;
 
   function updateQuote() {

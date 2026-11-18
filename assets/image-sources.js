@@ -1,0 +1,6 @@
+/* Delivery copies preserve each original photograph and crop. */
+const mobilePhotoSources = new Set(["assets/mesas_01.webp","assets/mesas_02.webp","assets/mesas_03.webp","assets/mesas_04.webp","assets/mesas_05.webp","assets/mesones_01.webp","assets/mesones_02.webp","assets/mesones_03.webp","assets/pedestal_01.webp","assets/pedestal_02.webp","assets/pedestal_03.webp","assets/pedestal_ambiente_04.webp","assets/pedestal_ambiente_07.webp","assets/pedestal_ambiente_08.webp","assets/rectangulares_01.webp","assets/rectangulares_02.webp","assets/rectangulares_03.webp","assets/rectangulares_04.webp","assets/rectangulares_05.webp","assets/rectangulares_06.webp","assets/rectangulares_07.webp","assets/sobreponer_01.webp","assets/sobreponer_02.webp","assets/sobreponer_03.webp","assets/sobreponer_amarillo.webp","assets/sobreponer_ambiente.webp","assets/sobreponer_ambiente_calido_01.webp","assets/sobreponer_hueso.webp","assets/sobreponer_terrazo_claro.webp","assets/tinas_01_real_color_08.webp","assets/tinas_ambiente_real_color_08.webp","assets/tinas_detalle_borde_real_color_06.webp","assets/tinas_rosa_real_color_08.webp","assets/tinas_verde_real_color_05.webp"]);
+function catalogImageURL(source) {
+  return matchMedia('(max-width: 600px)').matches && mobilePhotoSources.has(source)
+    ? source.replace('assets/', 'assets/mobile/') : source;
+}

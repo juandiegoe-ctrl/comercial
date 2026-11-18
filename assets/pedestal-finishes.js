@@ -25,7 +25,7 @@
   ].map(([id, background, grains]) => ({
     id, background, grains,
     number: String(id).padStart(2, '0'),
-    sample: id === 21 ? 'assets/color_21.png' : `assets/color_${String(id).padStart(2, '0')}.webp`,
+    sample: id === 21 ? 'assets/color_21.webp' : `assets/color_${String(id).padStart(2, '0')}.webp`,
   }));
   const palette = document.querySelector('.product-colors-scroll');
   const note = document.createElement('p');
@@ -123,9 +123,9 @@
 
   function imageSource(photoIndex, finishId) {
     const photo = products[active].photos[photoIndex];
-    return finishId === photo.original
+    return catalogImageURL(finishId === photo.original
       ? photo.source || `assets/${active}_${photo.number}.webp`
-      : `assets/${active}_${photo.number}_acabado_${String(finishId).padStart(2, '0')}.${photo.extension || 'png'}`;
+      : `assets/${active}_${photo.number}_acabado_${String(finishId).padStart(2, '0')}.${photo.extension || 'webp'}`);
   }
 
   function description(finish) {

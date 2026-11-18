@@ -23,7 +23,7 @@ DATA=[{'key': 'pedestal',
   'slug': 'tinas-de-concreto',
   'name': 'Tinas de concreto',
   'heading': 'Tinas de concreto para tu baño',
-  'image': 'tinas_01_real_color_08.png',
+  'image': 'tinas_01_real_color_08.webp',
   'description': 'Tinas de concreto ESTONA fabricadas en Bogotá. Conoce sus formas y colores, '
                  'explora fotografías y consulta la cotización para tu proyecto de baño.'},
  {'key': 'mesas',
@@ -86,13 +86,14 @@ for d in DATA:
  gallery=galleries[d['key']]
  sheet=runtime
  sheet=sheet.replace('<div aria-label="Ficha del producto" aria-modal="true" class="lightbox" id="lightbox" role="dialog" tabindex="-1">','<main aria-label="'+E(d['name'])+'" class="lightbox open" id="lightbox" tabindex="-1">',1)
- sheet=sheet.replace('</div><script src="assets/catalog.js">','</main><script src="assets/catalog.js">',1)
+ sheet=sheet.replace('</div><script src="assets/image-sources.js">','</main><script src="assets/image-sources.js">',1)
  sheet=sheet.replace('<h2 id="gallery-label"></h2>','<h1 id="gallery-label">'+E(d['name'])+'</h1>',1)
  rows=''.join('<div class="tech-row"><span>'+E(k)+'</span><strong>'+E(v)+'</strong></div>' for k,v in specs[d['key']])
  sheet=sheet.replace('<div id="tech-rows"></div>','<div id="tech-rows">'+rows+'</div>',1)
  sheet=sheet.replace('<span id="gallery-count"></span>','<span id="gallery-count">01 / '+str(len(gallery['images'])).zfill(2)+'</span>',1)
  first=gallery['images'][0]
- sheet=sheet.replace('id="gallery-track" aria-label="Fotografías del producto" tabindex="0"></div>','id="gallery-track" aria-label="Fotografías del producto" tabindex="0"><div class="gallery-slide"><img src="'+first+'" alt="'+E(d['name'])+' ESTONA — fotografía 1" fetchpriority="high" decoding="async"/></div></div>',1)
+ first_photo='<picture><source media="(max-width: 600px)" srcset="'+first.replace('assets/','assets/mobile/')+'"/><img src="'+first+'" alt="'+E(d['name'])+' ESTONA — fotografía 1" fetchpriority="high" decoding="async"/></picture>'
+ sheet=sheet.replace('id="gallery-track" aria-label="Fotografías del producto" tabindex="0"></div>','id="gallery-track" aria-label="Fotografías del producto" tabindex="0"><div class="gallery-slide">'+first_photo+'</div></div>',1)
  sheet=sheet.replace('id="product-quote" rel=', 'id="product-quote" href="https://wa.me/573113900646?text='+quote('Hola, quiero cotizar: '+d['name']+'.')+'" rel=',1)
  sheet=sheet.replace('</body>','<noscript><style>.lightbox{position:relative;min-height:100dvh}.photo-stage .gallery-track{position:absolute}.product-panel{max-height:none}.product-palette,.prev,.next,.close{display:none}</style><p><a href="/">Volver a ESTONA</a></p></noscript><script src="assets/category-page.js"></script></body>',1)
  out=ROOT/d['slug'];out.mkdir(exist_ok=True)

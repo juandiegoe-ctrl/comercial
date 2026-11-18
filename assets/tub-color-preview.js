@@ -86,7 +86,7 @@
     if (slide.dataset.previewColor === String(selected)) { note.textContent = label; return; }
     note.textContent = `Cargando color ${number}…`;
     const colorIndex = selected;
-    const source = `assets/${photos[photoIndex]}_real_color_${number}.png`;
+    const source = `assets/${photos[photoIndex]}_real_color_${number}.webp`;
     try {
       if (!loaded.has(source)) {
         const image = new Image();

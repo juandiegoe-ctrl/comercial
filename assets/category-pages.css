@@ -9,8 +9,6 @@
 .product-about{margin:0 0 10px;flex-shrink:0;color:var(--muted)}
 .product-about summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0;font-size:11px;line-height:1.5;list-style:none;cursor:pointer}
 .product-about summary::-webkit-details-marker{display:none}
-.product-about summary::after{content:'+';font-size:15px;line-height:1}
-.product-about[open] summary::after{content:'−'}
 .product-about summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 .product-about p{font-size:12px;line-height:1.6;margin:5px 0 0}
 @media(min-width:851px){.product-aside:has(.product-about){overflow-y:auto}}

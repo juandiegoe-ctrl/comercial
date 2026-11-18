@@ -84,10 +84,12 @@ for d in DATA:
  specs=json.loads(re.search(r';const specs=(.*?);\nlet active',app,re.S)[1])
  galleries=json.loads(re.search(r'const galleries=(.*?);const specs=',app,re.S)[1])
  gallery=galleries[d['key']]
+ descriptions=json.loads(re.search(r'const productDescriptions=(.*?);\n',app,re.S)[1])
  sheet=runtime
  sheet=sheet.replace('<div aria-label="Ficha del producto" aria-modal="true" class="lightbox" id="lightbox" role="dialog" tabindex="-1">','<main aria-label="'+E(d['name'])+'" class="lightbox open" id="lightbox" tabindex="-1">',1)
  sheet=sheet.replace('</div><script src="assets/image-sources.js">','</main><script src="assets/image-sources.js">',1)
  sheet=sheet.replace('<h2 id="gallery-label"></h2>','<h1 id="gallery-label">'+E(d['name'])+'</h1>',1)
+ sheet=sheet.replace('<p id="product-description"></p>','<p id="product-description">'+E(descriptions[d['key']])+'</p>',1)
  rows=''.join('<div class="tech-row"><span>'+E(k)+'</span><strong>'+E(v)+'</strong></div>' for k,v in specs[d['key']])
  sheet=sheet.replace('<div id="tech-rows"></div>','<div id="tech-rows">'+rows+'</div>',1)
  sheet=sheet.replace('<span id="gallery-count"></span>','<span id="gallery-count">01 / '+str(len(gallery['images'])).zfill(2)+'</span>',1)

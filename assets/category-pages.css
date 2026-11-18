@@ -5,4 +5,13 @@
 .tile>picture,.feature>picture{display:block;width:100%;height:100%}
 /* Category pages use the same product sheet as the homepage gallery. */
 .product-aside h1#gallery-label{font-size:28px;font-weight:400;letter-spacing:-.045em;line-height:1.05;margin:10px 0 12px;max-width:none}
+.product-aside:has(.product-about) #gallery-label{margin-bottom:4px}
+.product-about{margin:0 0 10px;flex-shrink:0;color:var(--muted)}
+.product-about summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0;font-size:11px;line-height:1.5;list-style:none;cursor:pointer}
+.product-about summary::-webkit-details-marker{display:none}
+.product-about summary::after{content:'+';font-size:15px;line-height:1}
+.product-about[open] summary::after{content:'−'}
+.product-about summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.product-about p{font-size:12px;line-height:1.6;margin:5px 0 0}
+@media(min-width:851px){.product-aside:has(.product-about){overflow-y:auto}}
 @media(max-width:850px){.category-links{padding-inline:22px}.category-links nav{flex-direction:column;align-items:start}.product-aside h1#gallery-label{font-size:21px;margin:4px 0 6px}}

@@ -6,6 +6,8 @@
 .lightbox .prev,.lightbox .next{background:transparent;color:#fff;border:0;box-shadow:none;width:44px;font-size:38px;text-shadow:0 1px 4px #0007}
 .lightbox .prev:focus-visible,.lightbox .next:focus-visible{outline:2px solid #fff;outline-offset:-3px;border-radius:50%}
 .lightbox .product-palette-heading button{border:0;background:transparent;box-shadow:none;font-size:19px;width:26px!important;height:26px!important}
+.palette-swipe-hint{display:none}
+@media(max-width:850px){.lightbox .product-palette-heading button{display:none}.palette-swipe-hint{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:0;text-transform:none;color:var(--muted)}}
 .product-palette:has([data-palette="tinas"]) .product-palette-heading>div{display:none}
 .product-colors-scroll[data-palette="tinas"]{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:clamp(4px,1.5vw,10px);width:100%;max-width:390px;overflow:visible;scroll-snap-type:none}
 .product-colors-scroll[data-palette="tinas"] .tub-color-button{width:100%;min-width:0}

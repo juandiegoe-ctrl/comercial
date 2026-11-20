@@ -13,12 +13,15 @@
 .product-colors-scroll[data-palette="tinas"] .tub-color-button{width:100%;min-width:0}
 /* Category pages use the same product sheet as the homepage gallery. */
 .product-aside h1#gallery-label{font-size:28px;font-weight:400;letter-spacing:-.045em;line-height:1.05;margin:10px 0 12px;max-width:none}
-.product-aside:has(.product-about) #gallery-label{margin-bottom:4px}
-.product-about{margin:0 0 10px;flex-shrink:0;color:var(--muted)}
-.product-about summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0;font-size:11px;line-height:1.5;list-style:none;cursor:pointer}
+.product-heading{position:relative;flex-shrink:0}
+.product-aside .product-heading #gallery-label{margin:6px 0 8px;padding-right:70px}
+.product-about{margin:0;color:var(--muted)}
+.product-about summary{position:absolute;top:6px;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0;font-size:11px;line-height:1.5;list-style:none;cursor:pointer}
 .product-about summary::-webkit-details-marker{display:none}
 .product-about summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
-.product-about p{font-size:12px;line-height:1.6;margin:5px 0 0}
+.product-about p{font-size:12px;line-height:1.6;margin:0 0 10px}
+.product-about .info-less,.product-about[open] .info-more{display:none}
+.product-about[open] .info-less{display:inline}
 @media(min-width:851px){.product-aside:has(.product-about){overflow-y:auto}}
 @media(max-width:850px){.pedestal-preview-note,.table-preview-note,.table-base-note,.product-palette:has([data-palette="tinas"]) .tub-preview-note{display:none}}
 @media(max-width:850px){.category-links{padding-inline:22px}.category-links nav{flex-direction:column;align-items:start}.product-aside h1#gallery-label{font-size:21px;margin:4px 0 6px}}

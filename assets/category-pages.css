@@ -12,11 +12,11 @@
 .product-colors-scroll[data-palette="tinas"]{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:clamp(4px,1.5vw,10px);width:100%;max-width:390px;overflow:visible;scroll-snap-type:none}
 .product-colors-scroll[data-palette="tinas"] .tub-color-button{width:100%;min-width:0}
 .product-palette{position:relative}
-.palette-tip{position:absolute;bottom:calc(100% + 6px);left:0;right:0;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 10px 8px 14px;background:var(--paper);border:1px solid #d0cec7;border-radius:10px;box-shadow:0 4px 16px #0002;color:var(--ink);font-size:12px;line-height:1.4}
+.palette-tip{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:var(--palette-tip-bottom,max(20px,env(safe-area-inset-bottom)));left:auto;z-index:40;width:min(300px,calc(100vw - 32px));padding:22px 44px 22px 22px;background-color:#10110e;background-image:linear-gradient(#eff74b08 1px,transparent 1px),linear-gradient(90deg,#eff74b08 1px,transparent 1px);background-size:12px 12px;border:1px solid #eff74b30;border-left:3px solid #eff74b;border-radius:3px;box-shadow:0 14px 40px #0006;color:#eff74b;font-family:'Courier New',Courier,monospace;font-size:18px;font-weight:400;line-height:1.35;letter-spacing:-.035em}
 .palette-tip[hidden]{display:none}
-.palette-tip::after{content:'';position:absolute;bottom:-5px;left:24px;width:8px;height:8px;background:var(--paper);border-right:1px solid #d0cec7;border-bottom:1px solid #d0cec7;transform:rotate(45deg)}
-.lightbox .palette-tip-close{position:static;display:grid;place-items:center;flex:0 0 28px;width:28px;height:28px;padding:0;border:0;background:transparent;color:inherit;font-size:22px;line-height:1;cursor:pointer}
-.palette-tip-close:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:4px}
+.lightbox .palette-tip-close{position:absolute;top:7px;right:7px;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;background:transparent;color:inherit;font-size:24px;line-height:1;cursor:pointer}
+.palette-tip-close:focus-visible{outline:2px solid #eff74b;outline-offset:1px;border-radius:2px}
+@media(max-width:850px){.palette-tip{right:max(16px,env(safe-area-inset-right));font-size:16px;padding:18px 40px 18px 18px}}
 /* Category pages use the same product sheet as the homepage gallery. */
 .product-aside h1#gallery-label{font-size:28px;font-weight:400;letter-spacing:-.045em;line-height:1.05;margin:10px 0 12px;max-width:none}
 .product-heading{position:relative;flex-shrink:0}

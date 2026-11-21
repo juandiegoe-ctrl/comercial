@@ -26,9 +26,21 @@ renderProductPalette(null);
 const paletteTip=document.querySelector('.palette-tip');
 const interactiveColor='[data-pedestal-finish]:not(:disabled),[data-table-finish]:not(:disabled),[data-tub-color]:not(:disabled),[data-table-base]:not(:disabled)';
 let paletteTipDismissed=false;
-try{paletteTipDismissed=sessionStorage.getItem('estona-palette-tip-v3-dismissed')==='true'}catch{}
-function syncPaletteTip(){paletteTip.hidden=paletteTipDismissed||document.querySelector('.product-palette').hidden||!productColors.querySelector(interactiveColor)}
-function dismissPaletteTip(){paletteTipDismissed=true;paletteTip.hidden=true;try{sessionStorage.setItem('estona-palette-tip-v3-dismissed','true')}catch{}}
+try{paletteTipDismissed=sessionStorage.getItem('estona-palette-tip-v4-dismissed')==='true'}catch{}
+function positionPaletteTip(){
+ paletteTip.style.removeProperty('--palette-tip-bottom');
+ if(paletteTip.hidden||!active||matchMedia('(max-width:850px)').matches)return;
+ const sample=productColors.querySelector('img,.solid-color');
+ if(!sample)return;
+ const colors=sample.getBoundingClientRect(),photo=document.querySelector('.product-visual').getBoundingClientRect();
+ const height=paletteTip.getBoundingClientRect().height;
+ const bottom=photo.bottom-(colors.top+colors.height/2)-height/2;
+ paletteTip.style.setProperty('--palette-tip-bottom',Math.max(12,Math.min(bottom,photo.height-height-12))+'px');
+}
+function syncPaletteTip(){paletteTip.hidden=paletteTipDismissed||document.querySelector('.product-palette').hidden||!productColors.querySelector(interactiveColor);requestAnimationFrame(positionPaletteTip)}
+window.addEventListener('resize',()=>requestAnimationFrame(positionPaletteTip),{passive:true});
+document.querySelector('.product-aside').addEventListener('scroll',()=>requestAnimationFrame(positionPaletteTip),{passive:true});
+function dismissPaletteTip(){paletteTipDismissed=true;paletteTip.hidden=true;try{sessionStorage.setItem('estona-palette-tip-v4-dismissed','true')}catch{}}
 paletteTip.querySelector('button').addEventListener('click',()=>{dismissPaletteTip();(productColors.querySelector('[aria-pressed="true"]')||productColors.querySelector(interactiveColor))?.focus({preventScroll:true})});
 productColors.addEventListener('click',event=>{if(event.target.closest(interactiveColor))dismissPaletteTip()});
 document.querySelector('.product-colors-prev').onclick=()=>productColors.scrollBy({left:-240,behavior:'smooth'});document.querySelector('.product-colors-next').onclick=()=>productColors.scrollBy({left:240,behavior:'smooth'});

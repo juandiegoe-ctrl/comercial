@@ -12,10 +12,12 @@
 .product-colors-scroll[data-palette="tinas"]{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:clamp(4px,1.5vw,10px);width:100%;max-width:390px;overflow:visible;scroll-snap-type:none}
 .product-colors-scroll[data-palette="tinas"] .tub-color-button{width:100%;min-width:0}
 .product-palette{position:relative}
-.palette-tip{position:absolute;right:12px;bottom:12px;z-index:4;width:220px;max-width:calc(100% - 24px);padding:10px 32px 10px 12px;background:#10110f;border:1px solid #ffffff24;border-radius:3px;box-shadow:0 4px 14px #0004;color:#bfc1bc;font-family:'Courier New',Courier,monospace;font-size:12px;font-weight:400;line-height:1.4;letter-spacing:0}
+.palette-tip{position:absolute;right:12px;bottom:12px;z-index:4;width:220px;max-width:calc(100% - 24px);padding:10px 32px 10px 12px;background:#10110f;border:1px solid #ffffff24;border-radius:3px;box-shadow:0 4px 14px #0004;color:#fff;font-family:inherit;font-size:12px;font-weight:400;line-height:1.4;letter-spacing:0}
 .palette-tip[hidden]{display:none}
+.palette-tip-arrow{display:none}
+@media(min-width:851px){.palette-tip{display:flex;align-items:center;gap:8px;bottom:var(--palette-tip-bottom,12px)}.palette-tip-arrow{display:block;flex:none;font-size:22px;line-height:1}}
 .lightbox .palette-tip-close{position:absolute;top:4px;right:4px;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;background:transparent;color:inherit;font-size:18px;line-height:1;cursor:pointer}
-.palette-tip-close:focus-visible{outline:2px solid #bfc1bc;outline-offset:1px;border-radius:2px}
+.palette-tip-close:focus-visible{outline:2px solid #fff;outline-offset:1px;border-radius:2px}
 /* Category pages use the same product sheet as the homepage gallery. */
 .product-aside h1#gallery-label{font-size:28px;font-weight:400;letter-spacing:-.045em;line-height:1.05;margin:10px 0 12px;max-width:none}
 .product-heading{position:relative;flex-shrink:0}

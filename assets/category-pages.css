@@ -12,11 +12,10 @@
 .product-colors-scroll[data-palette="tinas"]{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:clamp(4px,1.5vw,10px);width:100%;max-width:390px;overflow:visible;scroll-snap-type:none}
 .product-colors-scroll[data-palette="tinas"] .tub-color-button{width:100%;min-width:0}
 .product-palette{position:relative}
-.palette-tip{position:fixed;right:max(20px,env(safe-area-inset-right));bottom:var(--palette-tip-bottom,max(20px,env(safe-area-inset-bottom)));left:auto;z-index:40;width:min(300px,calc(100vw - 32px));padding:22px 44px 22px 22px;background-color:#10110e;background-image:linear-gradient(#eff74b08 1px,transparent 1px),linear-gradient(90deg,#eff74b08 1px,transparent 1px);background-size:12px 12px;border:1px solid #eff74b30;border-left:3px solid #eff74b;border-radius:3px;box-shadow:0 14px 40px #0006;color:#eff74b;font-family:'Courier New',Courier,monospace;font-size:18px;font-weight:400;line-height:1.35;letter-spacing:-.035em}
+.palette-tip{position:absolute;right:12px;bottom:12px;z-index:4;width:220px;max-width:calc(100% - 24px);padding:10px 32px 10px 12px;background:#10110f;border:1px solid #ffffff24;border-radius:3px;box-shadow:0 4px 14px #0004;color:#bfc1bc;font-family:'Courier New',Courier,monospace;font-size:12px;font-weight:400;line-height:1.4;letter-spacing:0}
 .palette-tip[hidden]{display:none}
-.lightbox .palette-tip-close{position:absolute;top:7px;right:7px;display:grid;place-items:center;width:30px;height:30px;padding:0;border:0;background:transparent;color:inherit;font-size:24px;line-height:1;cursor:pointer}
-.palette-tip-close:focus-visible{outline:2px solid #eff74b;outline-offset:1px;border-radius:2px}
-@media(max-width:850px){.palette-tip{right:max(16px,env(safe-area-inset-right));font-size:16px;padding:18px 40px 18px 18px}}
+.lightbox .palette-tip-close{position:absolute;top:4px;right:4px;display:grid;place-items:center;width:24px;height:24px;padding:0;border:0;background:transparent;color:inherit;font-size:18px;line-height:1;cursor:pointer}
+.palette-tip-close:focus-visible{outline:2px solid #bfc1bc;outline-offset:1px;border-radius:2px}
 /* Category pages use the same product sheet as the homepage gallery. */
 .product-aside h1#gallery-label{font-size:28px;font-weight:400;letter-spacing:-.045em;line-height:1.05;margin:10px 0 12px;max-width:none}
 .product-heading{position:relative;flex-shrink:0}

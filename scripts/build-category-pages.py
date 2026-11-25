@@ -65,16 +65,16 @@ footer=source[source.index('<footer>'):source.index('<div aria-label="Ficha del 
 runtime=source[source.index('<div aria-label="Ficha del producto"'):]
 basegraph=json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>',head,re.S)[1])
 for d in DATA:
- url='https://estona.co/'+d['slug']+'/'
+ url='https://www.estona.co/'+d['slug']+'/'
  title=d['heading']+' en Bogotá | ESTONA' if d['key']!='mesas' else 'Mesas en terrazo a medida en Bogotá | ESTONA'
  h=re.sub(r'<title>.*?</title>','<title>'+E(title)+'</title>',head)
  h=re.sub(r'<meta content="[^"]*" name="description"/>','<meta content="'+E(d['description'],quote=True)+'" name="description"/>',h)
- for attr,key,value in [('property','og:title',title),('property','og:description',d['description']),('property','og:url',url),('property','og:image','https://estona.co/assets/'+d['image']),('property','og:image:alt',d['heading']+' ESTONA'),('name','twitter:title',title),('name','twitter:description',d['description']),('name','twitter:image','https://estona.co/assets/'+d['image'])]:
+ for attr,key,value in [('property','og:title',title),('property','og:description',d['description']),('property','og:url',url),('property','og:image','https://www.estona.co/assets/'+d['image']),('property','og:image:alt',d['heading']+' ESTONA'),('name','twitter:title',title),('name','twitter:description',d['description']),('name','twitter:image','https://www.estona.co/assets/'+d['image'])]:
   h=re.sub(r'<meta '+attr+'="'+re.escape(key)+r'" content="[^"]*"/>','<meta '+attr+'="'+key+'" content="'+E(value,quote=True)+'"/>',h)
  h=re.sub(r'<link rel="canonical" href="[^"]*"/>','<link rel="canonical" href="'+url+'"/>',h)
  graph={'@context':'https://schema.org','@graph':basegraph['@graph'][:2]+[
- {'@type':'CollectionPage','@id':url+'#webpage','url':url,'name':title,'description':d['description'],'inLanguage':'es-CO','isPartOf':{'@id':'https://estona.co/#website'},'about':{'@id':'https://estona.co/#organization'},'primaryImageOfPage':{'@type':'ImageObject','url':'https://estona.co/assets/'+d['image']},'breadcrumb':{'@id':url+'#breadcrumb'}},
- {'@type':'BreadcrumbList','@id':url+'#breadcrumb','itemListElement':[{'@type':'ListItem','position':1,'name':'ESTONA','item':'https://estona.co/'},{'@type':'ListItem','position':2,'name':d['name'],'item':url}]}]}
+ {'@type':'CollectionPage','@id':url+'#webpage','url':url,'name':title,'description':d['description'],'inLanguage':'es-CO','isPartOf':{'@id':'https://www.estona.co/#website'},'about':{'@id':'https://www.estona.co/#organization'},'primaryImageOfPage':{'@type':'ImageObject','url':'https://www.estona.co/assets/'+d['image']},'breadcrumb':{'@id':url+'#breadcrumb'}},
+ {'@type':'BreadcrumbList','@id':url+'#breadcrumb','itemListElement':[{'@type':'ListItem','position':1,'name':'ESTONA','item':'https://www.estona.co/'},{'@type':'ListItem','position':2,'name':d['name'],'item':url}]}]}
  h=re.sub(r'<script type="application/ld\+json">.*?</script>','<script type="application/ld+json">'+json.dumps(graph,ensure_ascii=False,separators=(',',':'))+'</script>',h,flags=re.S)
  # Existing gallery controllers use paths relative to the site root.
  h=h.replace('<head>','<head><base href="/"/>',1)
@@ -100,6 +100,6 @@ for d in DATA:
  sheet=sheet.replace('</body>','<noscript><style>.lightbox{position:relative;min-height:100dvh}.photo-stage .gallery-track{position:absolute}.product-panel{max-height:none}.product-palette,.prev,.next,.close{display:none}</style><p><a href="/">Volver a ESTONA</a></p></noscript><script src="assets/category-page.js"></script></body>',1)
  out=ROOT/d['slug'];out.mkdir(exist_ok=True)
  (out/'index.html').write_text(h+'</head><body data-category="'+d['key']+'">'+sheet)
-urls=['https://estona.co/']+['https://estona.co/'+d['slug']+'/' for d in DATA]
+urls=['https://www.estona.co/']+['https://www.estona.co/'+d['slug']+'/' for d in DATA]
 (ROOT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join('  <url><loc>'+u+'</loc></url>\n' for u in urls)+'</urlset>\n')
 print('Built six category pages and seven sitemap URLs')

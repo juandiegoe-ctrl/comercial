@@ -5,10 +5,14 @@
 .tile>picture,.feature>picture{display:block;width:100%;height:100%}
 /* Show the whole photo inside a stable frame, including finish layers. */
 #gallery-track[data-gallery] .gallery-slide:nth-child(n) img{object-fit:contain;object-position:center;transform:none}
+#gallery-track .gallery-slide{overflow:hidden}
+@media(max-width:850px){
+ #gallery-track[data-gallery] .gallery-slide:nth-child(n) img{transform:scale(var(--mobile-photo-zoom,1));transform-origin:center}
+}
 @media(min-width:851px){
- .lightbox{padding:18px}
- .product-panel,.product-panel[data-table-gallery="true"]{width:min(1560px,100%);height:92dvh;max-height:92dvh}
- .product-body,.product-panel[data-table-gallery="true"] .product-body{height:100%;grid-template-columns:minmax(0,1fr) minmax(360px,36%)}
+ .lightbox{padding:12px}
+ .product-panel,.product-panel[data-table-gallery="true"]{width:min(1720px,100%);height:92dvh;max-height:92dvh}
+ .product-body,.product-panel[data-table-gallery="true"] .product-body{height:100%;grid-template-columns:minmax(0,1fr) minmax(360px,32%)}
  .product-visual{height:100%;min-height:0}
  .photo-stage{height:100%;aspect-ratio:auto}
  .product-aside,.product-panel[data-table-gallery="true"] .product-aside{max-height:92dvh;overflow-y:auto}

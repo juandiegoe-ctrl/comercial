@@ -49,3 +49,22 @@ document.querySelector('.product-colors-prev').onclick=()=>productColors.scrollB
 // Alinea mesas bajo el pedestal con el mismo espacio de la retícula.
 (()=>{const grid=document.querySelector('.editorial-grid');if(!grid)return;const pedestal=grid.querySelector('[data-gallery="pedestal"]'),tables=grid.querySelector('[data-gallery="mesas"]');let frame=0;function align(){frame=0;if(innerWidth<=850){grid.style.removeProperty('--tables-lift');return}const current=parseFloat(grid.style.getPropertyValue('--tables-lift'))||0;const gap=parseFloat(getComputedStyle(grid).rowGap)||0;const naturalTop=tables.getBoundingClientRect().top+current;const lift=Math.max(0,naturalTop-pedestal.getBoundingClientRect().bottom-gap);if(Math.abs(lift-current)>.5)grid.style.setProperty('--tables-lift',lift+'px')}function queue(){if(!frame)frame=requestAnimationFrame(align)}new ResizeObserver(queue).observe(grid);window.addEventListener('resize',queue,{passive:true});queue()})();
 
+// Balance mobile margins against cropping without changing the sheet dimensions.
+(()=>{
+ const stage=document.querySelector('.photo-stage');
+ function update(){
+  if(!stage.clientWidth||!stage.clientHeight)return;
+  const frameRatio=stage.clientWidth/stage.clientHeight;
+  for(const slide of track.children){
+   const image=slide.querySelector(':scope > img');
+   if(!image?.naturalWidth)continue;
+   const ratio=image.naturalWidth/image.naturalHeight;
+   const fillScale=Math.max(frameRatio/ratio,ratio/frameRatio);
+   const zoom=Math.min(1.18,1+(fillScale-1)*.5);
+   slide.style.setProperty('--mobile-photo-zoom',String(zoom));
+  }
+ }
+ track.addEventListener('load',update,true);
+ new ResizeObserver(update).observe(stage);
+ update();
+})();

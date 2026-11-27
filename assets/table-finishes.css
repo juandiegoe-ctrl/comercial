@@ -4,7 +4,7 @@
 .table-scene[data-table-photo]:not([data-table-photo="01"]){inset:0;height:100%;aspect-ratio:auto;transform:none}
 .photo-stage .table-scene[data-table-photo]:not([data-table-photo="01"]) img{object-fit:cover}
 .table-scene .table-top-photo{z-index:1}
-.table-scene .table-base-photo{z-index:2;mask:url('table-base-mask.svg') center / cover no-repeat;-webkit-mask:url('table-base-mask.svg') center / cover no-repeat}
+.table-scene .table-base-photo{z-index:2;mask:url('table-base-mask.svg') center / contain no-repeat;-webkit-mask:url('table-base-mask.svg') center / contain no-repeat}
 #gallery-track[data-gallery="mesas"] .gallery-slide:first-child>img{object-fit:cover;object-position:center}
 .photo-stage:has(#gallery-track[data-gallery="mesas"]){aspect-ratio:1800 / 1671}
 .table-preview-note,.table-base-note{font-size:9px;line-height:1.4;min-height:1.4em;color:var(--muted);margin:5px 0 0}
